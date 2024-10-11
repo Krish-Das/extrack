@@ -9,12 +9,18 @@ import {
   NewTransactionSchema,
   NewTransactionSchemaType,
 } from "@/lib/types/new-transaction-form-schema";
+import { calculateTransactionOffset } from "@/lib/utils";
 import { currentUser } from "@clerk/nextjs";
 import { and, desc, eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { cache } from "react";
 
-export async function getTransactions(hasAllTransactions?: boolean) {
+export async function getTransactions(
+  hasAllTransactions?: boolean,
+  pageNo?: number,
+) {
+  const fetchOffset = calculateTransactionOffset(pageNo);
+
   const fetchLimit = hasAllTransactions
     ? MAX_TRANSACTION_FETCH_LIMIT
     : DISPLAY_TRANSACTION_FETCH_LIMIT;
@@ -30,6 +36,7 @@ export async function getTransactions(hasAllTransactions?: boolean) {
       .from(transax)
       .where(eq(transax.userId, sql.placeholder("userId")))
       .limit(fetchLimit)
+      .offset(fetchOffset)
       .orderBy(desc(transax.date))
       .prepare("prepareGetTransaction");
 

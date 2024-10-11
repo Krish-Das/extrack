@@ -49,11 +49,12 @@ export function toNormalCase(str: string): string {
 /**
  * Calculates the offset for paginated database results based on the given page number.
  * The offset is used to determine how many records to skip.
+ * If no page number is provided, it returns 1 as the default offset.
  *
- * @param {number} offsetLevel - The current page number, must be 1 or greater. If a number less than 1 is provided, it defaults to 1.
- * @returns {number} The calculated offset, based on the `MAX_TRANSACTION_FETCH_LIMIT` and page number.
+ * @param {number} [offsetLevel] - The current page number, must be 1 or greater. Defaults to 1 if not provided or less than 1.
+ * @returns {number} The calculated offset, or 1 if no valid page number is provided.
  */
-export function calculateTransactionOffset(offsetLevel: number): number {
-  const page = Math.max(1, offsetLevel); // Ensure page is at least 1
+export function calculateTransactionOffset(offsetLevel?: number): number {
+  const page = Math.max(1, Math.floor(offsetLevel ?? 1));
   return MAX_TRANSACTION_FETCH_LIMIT * (page - 1);
 }

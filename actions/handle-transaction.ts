@@ -2,6 +2,10 @@
 import { db } from "@/db";
 import { transax } from "@/db/drizzle/schema";
 import {
+  DISPLAY_TRANSACTION_FETCH_LIMIT,
+  MAX_TRANSACTION_FETCH_LIMIT,
+} from "@/lib/defaultValues";
+import {
   NewTransactionSchema,
   NewTransactionSchemaType,
 } from "@/lib/types/new-transaction-form-schema";
@@ -10,11 +14,10 @@ import { and, desc, eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { cache } from "react";
 
-const DISPLAY_FETCH_LIMIT = 5;
-const MAX_FETCH_LIMIT = 12;
-
 export async function getTransactions(hasAllTransactions?: boolean) {
-  const fetchLimit = hasAllTransactions ? MAX_FETCH_LIMIT : DISPLAY_FETCH_LIMIT;
+  const fetchLimit = hasAllTransactions
+    ? MAX_TRANSACTION_FETCH_LIMIT
+    : DISPLAY_TRANSACTION_FETCH_LIMIT;
 
   try {
     const user = await currentUser();

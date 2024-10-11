@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { MAX_TRANSACTION_FETCH_LIMIT } from "./defaultValues";
 
 //  TODO: Localize these variables in future
 export const LOCALE = "en-IN" as const;
@@ -43,4 +44,16 @@ export function formatDate(
 
 export function toNormalCase(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+/**
+ * Calculates the offset for paginated database results based on the given page number.
+ * The offset is used to determine how many records to skip.
+ *
+ * @param {number} offsetLevel - The current page number, must be 1 or greater. If a number less than 1 is provided, it defaults to 1.
+ * @returns {number} The calculated offset, based on the `MAX_TRANSACTION_FETCH_LIMIT` and page number.
+ */
+export function calculateTransactionOffset(offsetLevel: number): number {
+  const page = Math.max(1, offsetLevel); // Ensure page is at least 1
+  return MAX_TRANSACTION_FETCH_LIMIT * (page - 1);
 }

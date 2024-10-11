@@ -1,4 +1,10 @@
 //
+// Fetch transaction
+//
+export const MAX_TRANSACTION_FETCH_LIMIT = 12 as const;
+export const DISPLAY_TRANSACTION_FETCH_LIMIT = 5 as const;
+
+//
 // New transaction form
 //
 export const MINIMUM_SARTING_BALANCE = 500 as const;

@@ -2,14 +2,21 @@
 
 import { fetchTransactions } from "./fetchTransactions";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 
 export default function TransactionList() {
-  const { data, status, error } = useInfiniteQuery({
+  const { data, status, error, fetchNextPage, isFetching } = useInfiniteQuery({
     queryKey: ["transaction"],
     queryFn: fetchTransactions,
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextPage,
   });
+  const { ref, inView } = useInView();
+
+  useEffect(() => {
+    if (inView) fetchNextPage();
+  }, [inView, fetchNextPage]);
 
   return status === "pending" ? (
     <p>Loading...</p>
@@ -26,6 +33,10 @@ export default function TransactionList() {
           ))}
         </div>
       ))}
+
+      <div ref={ref} className="rounded bg-gray-200 p-10">
+        {isFetching && "Loading..."}
+      </div>
     </div>
   );
 }

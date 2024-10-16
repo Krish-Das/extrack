@@ -30,6 +30,7 @@ export async function fetchPaginatedData(
         amount: transaction.amount / 100,
       }));
 
+    // TODO: force-cache : use unstable_cache
     const totalCount = await db
       .select({ count: sql<number>`count(*)` })
       .from(transax)

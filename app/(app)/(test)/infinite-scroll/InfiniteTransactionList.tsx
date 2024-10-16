@@ -7,6 +7,7 @@ import { fetchPaginatedData } from "./actions/infiniteAction";
 import { TRANSACTION_PER_PAGE_FETCH_LIMIT } from "@/lib/defaultValues";
 import InfiniteTransactionWrapper from "./InfiniteTransactionSkeleton";
 import TransactionItem from "@/components/transactions/TransactionItem";
+import EndOfTransaction from "@/components/transactions/EndOfTransaction";
 
 export default function InfiniteTransactionList() {
   const { data, status, error, fetchNextPage, hasNextPage } = useInfiniteQuery({
@@ -42,11 +43,7 @@ export default function InfiniteTransactionList() {
 
       {/* TODO: don't always render 12 skeletons, canculate the number. */}
       <div ref={ref}>
-        {hasNextPage ? (
-          <InfiniteTransactionWrapper />
-        ) : (
-          <p className="p-5 text-center font-bold text-orange-400">Nada</p>
-        )}
+        {hasNextPage ? <InfiniteTransactionWrapper /> : <EndOfTransaction />}
       </div>
     </div>
   );

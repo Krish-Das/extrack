@@ -116,6 +116,7 @@ export async function insertTransactions(formData: NewTransactionSchemaType) {
     // TODO: Use revalidate tag instead
     revalidatePath("/");
     revalidatePath("/transactions");
+
     revalidateTag("transactions");
 
     return { success: "Added new transaction" };
@@ -170,6 +171,8 @@ export async function updateTransaction(
     revalidatePath("/transactions");
     revalidatePath(`/transactions/${updateId}`);
 
+    revalidateTag("transactions");
+
     return { success: "Updated the transaction" };
   } catch (error) {
     return { error: "An error occured while adding new transaction" };
@@ -204,6 +207,8 @@ export async function deleteTransaction(transactionId: string) {
     revalidatePath("/");
     revalidatePath("/transactions");
     revalidatePath(`/transactions/${transactionId}`);
+
+    revalidateTag("transactions");
 
     return { success: "Transaction is successfully deleted!" };
   } catch (error) {

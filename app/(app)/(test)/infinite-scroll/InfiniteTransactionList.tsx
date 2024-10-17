@@ -18,7 +18,6 @@ export default function InfiniteTransactionList() {
         ? undefined
         : lastPage.nextOffset,
     initialPageParam: 0,
-    staleTime: Infinity,
   });
 
   const { ref, inView } = useInView();

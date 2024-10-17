@@ -49,7 +49,7 @@ export const cachedInfiniteTransactions = unstable_cache(
   { tags: ["transactions", "infinite_transactions"], revalidate: false },
 );
 
-export async function fetchPaginatedData(offset: number = 0) {
+export async function fetchInfiniteTransactions(offset: number = 0) {
   try {
     const { userId } = auth();
     if (!userId) throw new Error("User not found");

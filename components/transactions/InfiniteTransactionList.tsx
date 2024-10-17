@@ -3,7 +3,7 @@
 import { Fragment, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { fetchPaginatedData } from "./actions/infiniteAction";
+import { fetchInfiniteTransactions } from "@/actions/handleCachedTransaction";
 import { TRANSACTION_PER_PAGE_FETCH_LIMIT } from "@/lib/defaultValues";
 import InfiniteTransactionWrapper from "./InfiniteTransactionSkeleton";
 import TransactionItem from "@/components/transactions/TransactionItem";
@@ -12,7 +12,7 @@ import EndOfTransaction from "@/components/transactions/EndOfTransaction";
 export default function InfiniteTransactionList() {
   const { data, status, error, fetchNextPage, hasNextPage } = useInfiniteQuery({
     queryKey: ["transaction"],
-    queryFn: async ({ pageParam = 0 }) => fetchPaginatedData(pageParam),
+    queryFn: async ({ pageParam = 0 }) => fetchInfiniteTransactions(pageParam),
     getNextPageParam: (lastPage) =>
       lastPage.data.length < TRANSACTION_PER_PAGE_FETCH_LIMIT
         ? undefined
@@ -31,9 +31,9 @@ export default function InfiniteTransactionList() {
   ) : status === "error" ? (
     <p>{error.message}</p>
   ) : (
-    <div className="flex flex-col gap-1">
-      {data.pages.map((page) => (
-        <Fragment key={page.nextOffset}>
+    <div className="space-y-1">
+      {data.pages.map((page, idx) => (
+        <Fragment key={idx}>
           {page.data.map((transaction) => (
             <TransactionItem key={transaction.id} transaction={transaction} />
           ))}

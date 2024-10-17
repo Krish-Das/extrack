@@ -7,7 +7,7 @@ import {
 } from "@/lib/types/new-transaction-form-schema";
 import { currentUser } from "@clerk/nextjs";
 import { and, desc, eq, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { cache } from "react";
 
 const DISPLAY_FETCH_LIMIT = 5;
@@ -116,6 +116,7 @@ export async function insertTransactions(formData: NewTransactionSchemaType) {
     // TODO: Use revalidate tag instead
     revalidatePath("/");
     revalidatePath("/transactions");
+    revalidateTag("transactions");
 
     return { success: "Added new transaction" };
   } catch (error) {

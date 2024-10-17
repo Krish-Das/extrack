@@ -46,7 +46,7 @@ export const cachedInfiniteTransactions = unstable_cache(
   },
   // TODO: Read the docs for this argument
   [],
-  { tags: ["transactions"], revalidate: false },
+  { tags: ["transactions", "infinite_transactions"], revalidate: false },
 );
 
 export async function fetchPaginatedData(offset: number = 0) {

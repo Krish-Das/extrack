@@ -5,6 +5,11 @@ import { twMerge } from "tailwind-merge";
 export const LOCALE = "en-IN" as const;
 export const TIMEZONE = "Asia/Kolkata" as const;
 
+export type GroupedTransactionsType = {
+  [date: string]: transactionSchemaType[];
+};
+
+// --- --- General Utility functions --- ---
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -43,4 +48,36 @@ export function formatDate(
 
 export function toNormalCase(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+// --- --- Utility functions for Transactions --- ---
+export function groupTransactions(transactions: transactionSchemaType[]) {
+  const groupedTransactionsObject = transactions.reduce(
+    (acc: GroupedTransactionsType, transaction) => {
+      const date = formatDate(transaction.date);
+
+      const updatedTransaction = {
+        ...transaction,
+        amount: transaction.amount / 100,
+      };
+
+      if (acc[date]) {
+        acc[date].push(updatedTransaction);
+      } else {
+        acc[date] = [updatedTransaction];
+      }
+
+      return acc;
+    },
+    {} as GroupedTransactionsType, // Initialize as an empty object
+  );
+
+  const groupedTransactionsArray = Object.entries(
+    groupedTransactionsObject,
+  ).map(([date, transactions]) => ({
+    Date: date,
+    transactions,
+  }));
+
+  return groupedTransactionsArray;
 }

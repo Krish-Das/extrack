@@ -42,10 +42,14 @@ export default function InfiniteTransactionList() {
         </Fragment>
       ))}
 
-      {isFetching ? (
-        <InfiniteTransactionSkeletonWrapper />
-      ) : hasNextPage ? (
-        <div className="transactions-infinite-scroll__trigger" ref={ref} />
+      {hasNextPage && isFetching && <InfiniteTransactionSkeletonWrapper />}
+      {hasNextPage ? (
+        !isFetching && (
+          <InfiniteTransactionSkeletonWrapper
+            className="transactions-infinite-scroll__trigger"
+            ref={ref}
+          />
+        )
       ) : (
         <EndOfTransaction />
       )}

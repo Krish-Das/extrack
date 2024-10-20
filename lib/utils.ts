@@ -33,17 +33,32 @@ export function formatCurrency(amount: number) {
   return formattedCurrency;
 }
 
+// TODO: Merge formatDate & formatDateInMonthAndYear function into one
 export function formatDate(
   date: Date | string,
   monthLength: "long" | "short" = "short",
   showYear: boolean = false,
 ) {
-  return new Intl.DateTimeFormat(LOCALE, {
+  const formattedDate = typeof date === "string" ? new Date(date) : date;
+  const options: Intl.DateTimeFormatOptions = {
     timeZone: TIMEZONE,
     day: "numeric",
     month: monthLength,
     ...(showYear && { year: "numeric" }), // Include 'year' only if showYear is true
-  }).format(new Date(date));
+  };
+
+  return new Intl.DateTimeFormat(LOCALE, options).format(formattedDate);
+}
+
+// TODO: Merge formatDate & formatDateInMonthAndYear function into one
+export function formatDateInMonthAndYear(date: Date | string) {
+  const formattedDate = typeof date === "string" ? new Date(date) : date;
+  const options: Intl.DateTimeFormatOptions = {
+    month: "long",
+    year: "numeric",
+  };
+
+  return new Intl.DateTimeFormat(LOCALE, options).format(formattedDate);
 }
 
 export function toNormalCase(str: string): string {
@@ -61,7 +76,7 @@ export function processTransactionData(data: transactionSchemaType[]) {
 export function groupTransactions(transactions: transactionSchemaType[]) {
   const groupedTransactionsObject = transactions.reduce(
     (acc: GroupedTransactionsType, transaction) => {
-      const date = formatDate(transaction.date);
+      const date = formatDateInMonthAndYear(transaction.date);
 
       if (acc[date]) {
         acc[date].push(transaction);

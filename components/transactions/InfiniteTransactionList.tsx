@@ -42,32 +42,39 @@ export default function InfiniteTransactionList() {
 
         return (
           <Fragment key={pageIdx}>
-            {page.groupedTransactions.map((group, groupIdx) => (
-              <div
-                key={groupIdx}
-                className="transaction-group__wraper space-y-1"
-              >
-                {/* --- --- --- group Date ---  ---  ---  */}
-                {group.Date !== lastTransactionDate && (
-                  <div className="group-date mt-4 inline-flex w-full items-center gap-3 pl-1">
-                    <p className="text-xs font-bold uppercase text-primary/30">
-                      {group.Date}
-                    </p>
-                  </div>
-                )}
+            {page.groupedTransactions.map((group, groupIdx) => {
+              const splitDate = group.Date.split(" ");
 
-                {/* --- --- --- Transactions ---  ---  ---  */}
-                <div className="transaction-item__wrapper rounded-md bg-card">
-                  {group.transactions.map((transactions) => (
-                    <TransactionItem
-                      key={transactions.id}
-                      transaction={transactions}
-                      showDate={false}
-                    />
-                  ))}
+              return (
+                <div
+                  key={groupIdx}
+                  className="transaction-group__wraper space-y-1"
+                >
+                  {/* --- --- --- group Date ---  ---  ---  */}
+                  {group.Date !== lastTransactionDate && (
+                    <div className="group-date mt-4 inline-flex w-full items-center gap-3 py-2 pl-1">
+                      <p className="text-base leading-none text-primary/40">
+                        <span className="font-extrabold -uppercase">
+                          {splitDate[0]}
+                        </span>{" "}
+                        <span className="">{splitDate[1]}</span>
+                      </p>
+                      <div className="mb-px h-[2px] w-full flex-1 bg-primary/10" />
+                    </div>
+                  )}
+
+                  {/* --- --- --- Transactions ---  ---  ---  */}
+                  <div className="transaction-item__wrapper space-y-1">
+                    {group.transactions.map((transactions) => (
+                      <TransactionItem
+                        key={transactions.id}
+                        transaction={transactions}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </Fragment>
         );
       })}

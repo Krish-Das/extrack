@@ -3,7 +3,7 @@
 import { db } from "@/db";
 import { transax } from "@/db/drizzle/schema";
 import { TRANSACTION_PER_PAGE_FETCH_LIMIT } from "@/lib/defaultValues";
-import { groupTransactions } from "@/lib/utils";
+import { groupTransactions, processTransactionData } from "@/lib/utils";
 import { auth } from "@clerk/nextjs/server";
 import { sql, eq, desc } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
@@ -26,18 +26,11 @@ export const fetchCachedTransactions = unstable_cache(
         .where(eq(transax.userId, userId))
         .then((res) => res[0].count);
 
-      // TODO: Extract into separate function
-      const transactions =
-        data &&
-        data.map(({ ...transaction }) => ({
-          ...transaction,
-          amount: transaction.amount / 100,
-        }));
+      const transactions = processTransactionData(data);
 
       return {
         ungroupedTransactions: transactions,
-        // TODO: Pass the converted transactions instead
-        groupedTransactions: groupTransactions(data),
+        groupedTransactions: groupTransactions(transactions),
         totalCount,
       };
     } catch (error) {

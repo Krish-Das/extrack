@@ -69,6 +69,7 @@ export default function InfiniteTransactionList() {
         );
       })}
 
+      {/* --- --- --- Loader and trigger ---  ---  ---  */}
       {hasNextPage && isFetching && <InfiniteTransactionSkeletonWrapper />}
       {hasNextPage ? (
         !isFetching && (

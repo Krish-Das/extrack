@@ -51,20 +51,22 @@ export function toNormalCase(str: string): string {
 }
 
 // --- --- Utility functions for Transactions --- ---
+export function processTransactionData(data: transactionSchemaType[]) {
+  return data.map((transaction) => ({
+    ...transaction,
+    amount: transaction.amount / 100,
+  }));
+}
+
 export function groupTransactions(transactions: transactionSchemaType[]) {
   const groupedTransactionsObject = transactions.reduce(
     (acc: GroupedTransactionsType, transaction) => {
       const date = formatDate(transaction.date);
 
-      const updatedTransaction = {
-        ...transaction,
-        amount: transaction.amount / 100,
-      };
-
       if (acc[date]) {
-        acc[date].push(updatedTransaction);
+        acc[date].push(transaction);
       } else {
-        acc[date] = [updatedTransaction];
+        acc[date] = [transaction];
       }
 
       return acc;

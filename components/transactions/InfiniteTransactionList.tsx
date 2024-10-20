@@ -43,23 +43,26 @@ export default function InfiniteTransactionList() {
         return (
           <Fragment key={pageIdx}>
             {page.groupedTransactions.map((group, groupIdx) => (
-              <div key={groupIdx} className="space-y-2">
+              <div
+                key={groupIdx}
+                className="transaction-group__wraper space-y-1"
+              >
                 {/* --- --- --- group Date ---  ---  ---  */}
                 {group.Date !== lastTransactionDate && (
-                  <div className="inline-flex w-full items-center gap-3">
-                    <p className="text-xs font-bold text-primary/30">
+                  <div className="group-date mt-4 inline-flex w-full items-center gap-3 pl-1">
+                    <p className="text-xs font-bold uppercase text-primary/30">
                       {group.Date}
                     </p>
-                    <div className="h-px w-full flex-1 bg-primary/5" />
                   </div>
                 )}
 
                 {/* --- --- --- Transactions ---  ---  ---  */}
-                <div className="space-y-1">
+                <div className="transaction-item__wrapper rounded-md bg-card">
                   {group.transactions.map((transactions) => (
                     <TransactionItem
                       key={transactions.id}
                       transaction={transactions}
+                      showDate={false}
                     />
                   ))}
                 </div>
